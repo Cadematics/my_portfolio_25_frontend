@@ -9,6 +9,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Login from "./pages/Login";
 import "./index.css";
 import App from './App.jsx'
+import ObjectDetection from './pages/ObjectDetection.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,8 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/projects", element: <Projects /> },
       { path: "/projects/:slug", element: <ProjectDetail /> },
+      { path: "/projects/object-detection", element: <ObjectDetection /> }, // 👈 new
+
       { path: "/login", element: <Login /> },
     ],
   },

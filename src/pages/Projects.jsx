@@ -1,40 +1,39 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getProjects } from "../api";
+import ProjectCard from "../components/ProjectCard";
 
 export default function Projects() {
   const [items, setItems] = useState([]);
-  const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
 
-  async function load(params={}) {
-    setLoading(true);
-    const data = await getProjects(params);
-    setItems(data.results ?? data);
-    setLoading(false);
-  }
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getProjects();
+        setItems(data.results ?? data);
+      } catch (e) {
+        setErr(e.message || "Failed to load projects");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  useEffect(() => { load(); }, []);
+  if (loading) return <p>Loading…</p>;
+  if (err) return <p className="text-red-600">{err}</p>;
 
   return (
     <section className="grid gap-4">
-      <div className="flex gap-2">
-        <input value={q} onChange={e=>setQ(e.target.value)}
-          placeholder="Search projects…" className="border rounded p-2 flex-1"/>
-        <button onClick={()=>load({q})} className="bg-blue-600 text-white px-4 rounded">Search</button>
-      </div>
+      <h1 className="text-2xl font-semibold">Projects</h1>
+      {!items.length && <p className="text-gray-500">No projects yet.</p>}
 
-      {loading ? <p>Loading…</p> : (
-        <div className="grid md:grid-cols-2 gap-4">
-          {items.map(p => (
-            <Link key={p.slug} to={`/projects/${p.slug}`} className="bg-white rounded shadow p-4 hover:shadow-md transition">
-              {p.cover_image && <img src={p.cover_image} alt="" className="rounded mb-3 aspect-video object-cover" />}
-              <h3 className="font-semibold">{p.title}</h3>
-              <p className="text-sm text-gray-600 line-clamp-2">{p.summary}</p>
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* project cards grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((p) => (
+          <ProjectCard key={p.slug} p={p} />
+        ))}
+      </div>
     </section>
   );
 }

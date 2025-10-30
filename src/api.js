@@ -30,3 +30,19 @@ export async function pingHealth() {
   if (!r.ok) throw new Error(`Health ${r.status}`);
   return r.json(); // -> { status: "ok" }
 }
+
+
+
+
+export async function postComment(slug, content, token) {
+  const r = await fetch(`${API}/api/projects/${slug}/comments/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ content })
+  });
+  if (!r.ok) throw new Error(`Comment failed: ${r.status}`);
+  return r.json();
+}
