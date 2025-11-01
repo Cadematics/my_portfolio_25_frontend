@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import "./index.css";
 import App from './App.jsx'
 import ObjectDetection from './pages/ObjectDetection.jsx';
+import ModelViewer from './pages/ModelViewer'
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,8 @@ const router = createBrowserRouter([
       { path: "/projects/object-detection", element: <ObjectDetection /> }, // 👈 new
 
       { path: "/login", element: <Login /> },
+      { path: "/projects/model-visualizer", element: <ModelViewer /> },
+
     ],
   },
 ]);
